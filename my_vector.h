@@ -18,8 +18,7 @@ struct my_vector {
     const uint32_t &operator[](size_t ind) const;
     const uint32_t &back() const;
 
-    my_vector &operator=(my_vector x);
-
+    my_vector &operator=(const my_vector &other) noexcept;
     bool operator==(const my_vector &x) const;
 
     void swap(my_vector &x);

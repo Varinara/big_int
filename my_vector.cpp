@@ -8,7 +8,7 @@ my_vector::my_vector()
 
 my_vector::my_vector(size_t size, uint32_t x)
 {
-    this->_size = size;
+    _size = size;
     if (size <= 4) {
         std::fill(data.small, data.small + size, x);
         is_big = false;
@@ -47,13 +47,14 @@ uint32_t &my_vector::operator[](size_t ind) {
         return data.small[ind];
     }
 }
-const uint32_t &my_vector::operator[](size_t ind) const
-{
-    if (is_big)
+const uint32_t &my_vector::operator[](size_t ind) const {
+    if (is_big) {
         return data.big.data.get()[ind];
-    else
+    } else {
         return data.small[ind];
+    }
 }
+
 
 const uint32_t &my_vector::back() const
 {
@@ -84,8 +85,23 @@ my_vector::my_vector(const my_vector &v) {
     }
 }
 
-my_vector &my_vector::operator=(my_vector rhs) {
-    swap(rhs);
+my_vector &my_vector::operator=(const my_vector &other) noexcept {
+    _size = other._size;
+
+    if (other.is_big) {
+        if (is_big) {
+            data.big.data = other.data.big.data;
+        }
+        else {
+            new(&data.big.data)std::shared_ptr<uint32_t >(other.data.big.data);
+        }
+    } else {
+        if (is_big)
+            data.big.data.reset();
+        std::copy(other.data.small, other.data.small + other._size, data.small);
+    }
+    data.big.capacity = other.data.big.capacity;
+    is_big = other.is_big;
     return *this;
 }
 
@@ -116,16 +132,6 @@ bool my_vector::operator==(const my_vector &x) const {
         }
     }
     return true;
-}
-
-void my_vector::swap(my_vector &other) {
-    std::swap(is_big, other.is_big);
-    std::swap(_size, other._size);
-
-    char x[sizeof(container)];
-    memcpy(x, &data, sizeof(container));
-    memcpy(&data, &other.data, sizeof(container));
-    memcpy(&other.data, x, sizeof(container));
 }
 
 void my_vector::detach() {
