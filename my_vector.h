@@ -1,7 +1,6 @@
 #ifndef BIGINT_OPTIMIZED_MY_VECTOR_H
 #define BIGINT_OPTIMIZED_MY_VECTOR_H
 
-
 #include <cstring>
 #include <memory>
 
@@ -71,6 +70,5 @@ private:
 
     void en_capasity();
 };
-
 
 #endif //BIGINT_OPTIMIZED_MY_VECTOR_H

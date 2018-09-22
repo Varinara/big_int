@@ -29,9 +29,7 @@ void my_vector::push_back(uint32_t value)
     } else
         {
         if (!is_big || _size == data.big.capacity)
-        {
             en_capasity();
-        }
         data.big.data.get()[_size] = value;
         _size++;
     }
@@ -94,7 +92,6 @@ void my_vector::en_capasity() {
     if (is_big) {
         auto *x = new uint32_t[2 * data.big.capacity];
         std::copy(data.big.data.get(), data.big.data.get() + data.big.capacity, x);
-
         data.big.data = std::shared_ptr<uint32_t>(x);
     } else {
         uint32_t x[4];
@@ -113,7 +110,7 @@ bool my_vector::operator==(const my_vector &x) const {
         return false;
     }
     for (size_t i = 0; i < _size; i++) {
-        if (this -> operator[](i) != x[i]) {
+        if (data.big.data.get()[i] != x[i]) {
             return false;
         }
     }
