@@ -93,10 +93,7 @@ void my_vector::en_capasity() {
     if (is_big) {
         auto *x = new uint32_t[2 * data.big.capacity];
         std::copy(data.big.data.get(), data.big.data.get() + data.big.capacity, x);
-        data.big.data = std::shared_ptr<uint32_t>(
-                x,
-                std::default_delete<uint32_t[]>()
-        );
+        data.big.data = std::shared_ptr<uint32_t>(x, std::default_delete<uint32_t[]>());
     } else {
         uint32_t x[4];
         for (size_t i = 0; i < 4; i++)
@@ -130,7 +127,6 @@ void my_vector::swap(my_vector &other) {
     memcpy(&data, &other.data, sizeof(container));
     memcpy(&other.data, x, sizeof(container));
 }
-
 
 void my_vector::detach() {
     if (!is_big || data.big.data.unique()) {
