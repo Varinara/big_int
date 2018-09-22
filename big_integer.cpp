@@ -37,7 +37,7 @@ big_integer::big_integer(int a) {
         data.push_back(digit_cast(a));
     } else {
         sign = false;
-        data.push_back(digit_cast((a) * -1));
+        data.push_back(digit_cast((digit_cast(a) * -1)));
     }
 }
 

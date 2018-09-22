@@ -138,9 +138,5 @@ void my_vector::detach() {
     }
     auto *x = new uint32_t[data.big.capacity];
     std::copy(data.big.data.get(), data.big.data.get() + data.big.capacity, x);
-
-    data.big.data = std::shared_ptr<uint32_t>(
-            x,
-            std::default_delete<uint32_t[]>()
-    );
+    data.big.data = std::shared_ptr<uint32_t>(x,std::default_delete<uint32_t[]>());
 }
