@@ -4,12 +4,10 @@
 #include <cstring>
 #include <memory>
 
-typedef unsigned int uint32_t;
-
 struct my_vector {
     my_vector();
     my_vector(size_t size, uint32_t x);
-    my_vector(my_vector const &v);
+    my_vector(my_vector const &x);
 
     void push_back(uint32_t value);
     void pop_back();
@@ -40,7 +38,7 @@ private:
         big_object()
         {
             capacity = 0;
-            data = NULL;
+            data = nullptr;
         }
 
         big_object(uint32_t *x, size_t new_capacity)

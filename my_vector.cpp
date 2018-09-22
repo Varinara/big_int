@@ -56,14 +56,16 @@ const uint32_t &my_vector::operator[](size_t ind) const
         return data.small[ind];
 }
 
-const uint32_t &my_vector::back() const {
+const uint32_t &my_vector::back() const
+{
     if (is_big)
         return data.big.data.get()[_size - 1];
     else
         return data.small[_size - 1];
 }
 
-void my_vector::pop_back() {
+void my_vector::pop_back()
+{
     _size--;
 }
 
