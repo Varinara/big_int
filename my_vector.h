@@ -43,7 +43,8 @@ private:
 
         big_object(uint32_t *x, size_t new_capacity)
         {
-            data = std::shared_ptr<uint32_t>(x);
+            data = std::shared_ptr<uint32_t>(x,
+                    std::default_delete<uint32_t[]>());
             capacity = new_capacity;
         }
 
@@ -63,8 +64,9 @@ private:
 
         uint32_t small[4];
         big_object big;
-
     } data;
+
+    void detach();
 
     void en_capasity();
 };

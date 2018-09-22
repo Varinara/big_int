@@ -4,7 +4,6 @@ my_vector::my_vector()
 {
     _size = 0;
     is_big = false;
-    data.small[0] = 0;
 }
 
 my_vector::my_vector(size_t size, uint32_t x)
@@ -22,7 +21,7 @@ my_vector::my_vector(size_t size, uint32_t x)
 
 void my_vector::push_back(uint32_t value)
 {
-
+    detach();
     if (!is_big && _size < 4)
     {
         data.small[_size++] = value;
@@ -40,14 +39,14 @@ std::size_t my_vector::size() const
     return _size;
 }
 
-uint32_t &my_vector::operator[](size_t ind)
-{
-    if (is_big)
+uint32_t &my_vector::operator[](size_t ind) {
+    if (is_big) {
+        detach();
         return data.big.data.get()[ind];
-    else
+    } else {
         return data.small[ind];
+    }
 }
-
 const uint32_t &my_vector::operator[](size_t ind) const
 {
     if (is_big)
@@ -94,7 +93,10 @@ void my_vector::en_capasity() {
     if (is_big) {
         auto *x = new uint32_t[2 * data.big.capacity];
         std::copy(data.big.data.get(), data.big.data.get() + data.big.capacity, x);
-        data.big.data = std::shared_ptr<uint32_t>(x);
+        data.big.data = std::shared_ptr<uint32_t>(
+                x,
+                std::default_delete<uint32_t[]>()
+        );
     } else {
         uint32_t x[4];
         for (size_t i = 0; i < 4; i++)
@@ -127,5 +129,18 @@ void my_vector::swap(my_vector &other) {
     memcpy(x, &data, sizeof(container));
     memcpy(&data, &other.data, sizeof(container));
     memcpy(&other.data, x, sizeof(container));
+}
 
+
+void my_vector::detach() {
+    if (!is_big || data.big.data.unique()) {
+        return;
+    }
+    auto *x = new uint32_t[data.big.capacity];
+    std::copy(data.big.data.get(), data.big.data.get() + data.big.capacity, x);
+
+    data.big.data = std::shared_ptr<uint32_t>(
+            x,
+            std::default_delete<uint32_t[]>()
+    );
 }
